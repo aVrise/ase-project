@@ -79,7 +79,7 @@ def write_inc(a, b):
             y = {'s':0,'p':1,'d':2,'f':3,'z':0}
             e = [y[c[i]] for i in e]
             # check LMAXMIX
-            if max(e) > 2 or 'LDAU':
+            if max(e) > 2 or 'LDAU' in b.keys():
                 if b['LMAXMIX'][1] != 1 or b['LMAXMIX'][2] != 2*max(e):
                     b['LMAXMIX'][1] = 1
                     b['LMAXMIX'][2] = 2*max(e)
