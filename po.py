@@ -9,8 +9,8 @@ usage:
 
                 # Comments
                 tio2R # the code of structures
-                cel # the optimizing mode: cell optimizing (cel), surface relaxation (sur)
-                opt # optimizing(opt) single point(sp) density of state(dos)
+                cel # system: cell optimizing (cel), surface relaxation (sur), molecule (mol)
+                opt # optimizing(opt), single point(sp), density of state(dos)
                 111 # Kpoints
                 0.2 # Fix atoms under this z value. When this number is less than 1, a fraction z value will be applied. When this number is no more than 0, no atom will be fixed.
                 ISTART=1 # specified parameter below
@@ -20,6 +20,7 @@ usage:
 requirements:
     modules:                    ase 3.21.1
     environment variable:       ASEDBCELL for the path of cell ase database
+                                ASEDBMOL for the path of cell ase database
                                 ASEDBSUR for the path of surface ase database
                                 ASEDBOSUR for the path of optimized surface ase database
                                 VASPPP for directory of vasp pseudopotential
@@ -41,7 +42,7 @@ from ase.io.vasp import write_vasp
 def readata(a, b, c):
     global par
     # Need to set the ENVIRONMENT VARIABLES to locate the corresponding ase database
-    x = {"cel": 'ASEDBCELL', '_sur': 'ASEDBOSUR', 'sur': 'ASEDBSUR'}
+    x = {"cel": 'ASEDBCELL', '_sur': 'ASEDBOSUR', 'sur': 'ASEDBSUR', "mol": 'ASEDBMOL'}
     y = {'celopt': ['ENCUT=600', 'ISIF=3' ], 'sursp': ['LCHARG=T','LWAVE=T','NSW=0','IBRION=-1', 'NELM=200']}
     if b+c in y.keys():
         par = par[:5] + y[b+c] + par[5:] 
@@ -141,7 +142,7 @@ def write_kpo(x):
 
 
 def write_pos(a, b, c):
-    if a == 'cel':
+    if a in ['cel', 'mol']:
         write_vasp('POSCAR', b, direct=True)
     else:
         stct.set_constraint(FixAtoms(indices=[x.index for x in stct if x.position[2] < max(
