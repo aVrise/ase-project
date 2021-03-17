@@ -29,9 +29,9 @@ b = sort(slab[1]*(1,2,1))
 # for i in slab:
 #     db2.write(i*(1,3,1))
 
-# view(b)
+view(b)
 
-db2.write(b, code='110_'+an+'_1x2', note='Rutile CrO2 sur110 1x2 Cr_pv')
+# db2.write(b, code='110_'+an+'_1x2', note='Rutile CrO2 sur110 1x2 Cr_pv')
 # db2.update(db2.get(code='tio2R_600_d3_110_1x2').id,b)
 
 # c = db2.get_atoms(name='tio2A101')
