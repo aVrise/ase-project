@@ -18,10 +18,23 @@ import numpy as np
 # an = 'cro2R_600_d3_T'
 # a = db1.get_atoms(code=an)
 a = read_vasp('POSCAR')
-slab = surfaces_with_termination(a, (1,1,0), layers=4,vacuum=10,termination='O',tol=1e-5)
+# a = read('/Users/jy/Downloads/TiC_mp-631_conventional_standard.cif')
+# path = '/Users/jy/Library/CloudStorage/OneDrive-Personal/severfiles/202305/sta_lao/LAO_STO'
+# l = ['sto_cell_opt.cif', 'lao_cell_opt.cif']
+# a = read('{:s}/{:s}'.format(path,l[0]))
+# a.cell=[3.905938479,3.905938479,3.905938479]
+# a = a * [18,1,1]
+# a.edit()
+# a = sort(a)
+# print(a.cell)
+# exit()
+# slab = surface(a,(0,0,1),1,5) * (4,4,1)
+# slab = surfaces_with_termination(a, (1,0,0), layers=4,vacuum=10,termination='O',tol=1e-5) #* (3,3,1)
 
+# slab = sort(slab)
 # slab = surface(a, (1,1,0), layers=4,vacuum=10)
-view(slab)
+# view(slab)
+# slab.edit()
 
 
 # print([x.position for x in b])
@@ -30,9 +43,9 @@ view(slab)
 
 # for i in slab:
 #     db2.write(i*(1,3,1))
-b = sort(slab[1]*(2,4,1))
-fix = FixAtoms(indices=[x.index for x in b if x.position[2] < 16])
-b.set_constraint(fix)
+# b = sort(slab[1]*(2,4,1))
+# fix = FixAtoms(indices=[x.index for x in b if x.position[2] < 16])
+# b.set_constraint(fix)
 # print(b.)
 
 # for x in b:
@@ -48,4 +61,4 @@ b.set_constraint(fix)
 
 # c = db2.get_atoms(name='tio2A101')
 # write('tio2R.cif',b)
-write_vasp('POSCAR1',b ,direct=True)
+# write_vasp('POSCAR', a, direct=True, sort=True)

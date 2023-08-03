@@ -22,11 +22,16 @@ def pos(x):
 # a = read_vasp('/Users/jy/severfiles/202105/pdos/ch4-rho2/POSCAR')
 # a = read('/Users/jy/severfiles/202105/pdos/ch4-rho2/1.xyz')
 a = read('/Users/jy/severfiles/202108/oso2.xyz')
+a = read('/Users/jy/Library/CloudStorage/OneDrive-Personal/severfiles/202106/big_rho2_rutile.xyz')
+# a = read('/Users/jy/Library/CloudStorage/OneDrive-Personal/severfiles/202108/ruo2_reduced.xyz')
+# a = read('POSCAR')
 
-A = 356
-B = 728
-C = 1538
-D = 1136
+A = 380
+B = 706
+C = 1537
+D = 1097
+A = 251 ; B = 634 ; C = 1433 ; D = 1046 # iro2
+A = 369 ; B = 756 ; C = 1551 ; D = 1165 # rho2
 # lattice
 
 # # AC = a[907].position - a[866].position
@@ -91,17 +96,18 @@ fix = FixAtoms(indices=[x.index for x in a if x.position[2] < 16])
 a.set_constraint(fix)
 
 # remove redundent 
-c_index = 113
-for i in a:
-    if i.symbol == 'C' and i.index != c_index:
-        i.position *= 0
-    if i.symbol == 'H' and np.linalg.norm(a[c_index].position - i.position) > 2:
-        i.position *= 0
-del a[a.positions[:,2]==0]
+# c_index = 768
+# for i in a:
+#     if i.symbol == 'C' and i.index != c_index:
+#         i.position *= 0
+#     if i.symbol == 'H' and np.linalg.norm(a[c_index].position - i.position) > 2:
+#         i.position *= 0
+# del a[a.positions[:,2]==0]
 
 a.edit()
 # write('/Users/jy/severfiles/202105/pdos/ch4-tio2/2.xyz',a)
-write_vasp('/Users/jy/severfiles/202107/POSCAR_ch4-iro2',a,direct=True,sort=True)
+# write_vasp('/Users/jy/severfiles/202107/POSCAR_ch4-iro2',a,direct=True,sort=True)
+# write_vasp('/Users/jy/Library/CloudStorage/OneDrive-Personal/severfiles/202108/POSCAR_ruo2225_ch4_0',a,direct=True,sort=True)
 # AC = a[98].position - a[141].position
 # BD = a[193].position - a[95].position
 # tt = a[111].position - a[141].position

@@ -10,13 +10,13 @@ import numpy as np
 
 
 # a = connect("ucells.db")
-a = connect('surs.db')
+# a = connect('surs.db')
 # a = connect('mole.db')
 # a = connect('coop.db')
 
 # b = read_vasp('t')
 # b = read_vasp('POSCAR')
-# b = bl.sort(b*(2,2,1))
+# b = bl.sort(b*(4,4,1))
 # b = a.get_atoms(code="_0ch4_110_mno2R_600_d3_T_2x4")
 # b = a.get_atoms(id=84)
   
@@ -37,7 +37,7 @@ a = connect('surs.db')
 # view(b)
 # write('../_out/model.xyz',b)
 # write('/Users/jy/severfiles/202103/movie.xyz',b)
-# write_vasp('POSCAR',b,direct=True)
+# write_vasp('CONTCAR',b,direct=True,sort=True)
 
 # copy neb structures
 # os.system('rm neb/*/*')
@@ -72,20 +72,20 @@ a = connect('surs.db')
 
 
 # add configuration
-b = a.get_atoms(code='_0ch3h_110_ruo2R_600_d3_T_1x2')
-blist = [0,1,2,3,4,51,34]
-# c = a.get_atoms(code='_110_iro2R_600_d3_2x4')
-c = read_vasp('POSCAR')
-clist = [182,45]
-dd = c[173].position - b[42].position
-del c[clist]
-for i in blist:
-    # if b[i].symbol == 'O':
-    #     b[i].position = b[i].position + dd + b.cell[0]
-    b[i].position = b[i].position + dd
-    c.extend(b[i])
-# c.edit()
-# write_vasp('POSCAR',c,sort=True,direct=True)
+# b = a.get_atoms(code='_0ch3h_110_ruo2R_600_d3_T_1x2')
+# blist = [0,1,2,3,4,51,34]
+# # c = a.get_atoms(code='_110_iro2R_600_d3_2x4')
+# c = read_vasp('POSCAR')
+# clist = [182,45]
+# dd = c[173].position - b[42].position
+# del c[clist]
+# for i in blist:
+#     # if b[i].symbol == 'O':
+#     #     b[i].position = b[i].position + dd + b.cell[0]
+#     b[i].position = b[i].position + dd
+#     c.extend(b[i])
+# # c.edit()
+# # write_vasp('POSCAR',c,sort=True,direct=True)
 
 # add transition
 # b = a.get_atoms(code='_0ch4-0ch3h_110_ruo2R_600_d3_T_1x2')
@@ -107,14 +107,34 @@ for i in blist:
 # write_vasp('POSCAR',c,sort=True,direct=True)
 
 # element substitute
-# b = read_vasp('POSCAR')
-b = c
-for i in range(len(b)):
-    if b[i].symbol == 'Ru':
-        # dis = [1.444,2.887,7.218,8.661] # Mn
-        # dis = [1.555,3.111,7.777, 9.332] # Ru
-        # if min([abs(b[i].position[1] - x) for x in dis]) < 0.5:
-        b[i].symbol = 'Os'
-view(b)
-# write_vasp('../_out/pos',b,direct=True,sort=True)
-write_vasp('POSCAR1',b,direct=True,sort=True)
+# # b = read_vasp('POSCAR')
+# b = c
+# for i in range(len(b)):
+#     if b[i].symbol == 'Ru':
+#         # dis = [1.444,2.887,7.218,8.661] # Mn
+#         # dis = [1.555,3.111,7.777, 9.332] # Ru
+#         # if min([abs(b[i].position[1] - x) for x in dis]) < 0.5:
+#         b[i].symbol = 'Os'
+# view(b)
+# # write_vasp('../_out/pos',b,direct=True,sort=True)
+# write_vasp('POSCAR1',b,direct=True,sort=True)
+
+#
+# path = '/Users/jy/Library/CloudStorage/OneDrive-Personal/severfiles/202305/cu2o_cu_gdy'
+# ref = read_vasp('CONTCAR')
+# d_ref = ref[6].position
+# for i in sys.argv[1:]:
+#     if i[-5:] == 'sur_0' or i[-1]  == '~' :
+#         continue
+
+#     a = read_vasp(i)
+#     a.wrap()
+#     b = ref.copy()
+#     for j in a:
+#         if j.symbol != 'C' and j.index != 18:
+#             j.position = j.position - a[6].position + d_ref 
+#             b.append(j)
+#     # view([a,b,ref])
+#     b.wrap()
+#     write_vasp('POSCAR_gdy-th_{}'.format(i[14:]),b,direct=True)
+    # exit()
