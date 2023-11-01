@@ -1,0 +1,78 @@
+
+
+# fix atoms: atom seq at ../CONTCAR 1st line 
+# awk 'BEGIN{j=1;jj=1} NR==1{for(i=1;i<=NF;i++) a[i]=$i} NR==FNR&&NR>1{if(NR==a[j]+10) {x[j]=$1;y[j]=$2;z[j]=$3;j++}} NR>FNR&&FNR<10{print} NR>FNR&&FNR==7{for(k=1;k<=NF;k++) {s+=$k;if($k<5) {for(kk=1;kk<=k;kk++) b[k]+=$kk;if($k>1){for(ii=1;ii<$k;ii++)b[k-ii]=b[k]-ii}}}} NR>FNR&&FNR>9&&FNR<=9+s{f=0;for(kk in b){if(b[kk]+9==FNR) {print;f=1}} for(k=1;k<=5;k++){if(f==0){temp=(x[k]-$1)^2+(y[k]-$2)^2+(z[k]-$3)^2; if(temp < 0.01) {print;f=1}}}if(f==0) print $1,$2,$3,"   F   F   F" }END{for(kk in b){ print kk,b[kk]+9}}' /home/users/ntu/dan003/jy/au/311/1x2/CONTCAR CONTCAR > POSCAR_freq
+
+
+# for i in */freq; do awk 'BEGIN{j=1;jj=1} NR==1{for(i=1;i<=NF;i++) a[i]=$i} NR==FNR&&NR>1{if(NR==a[j]+10) {x[j]=$1;y[j]=$2;z[j]=$3;j++}} NR>FNR&&FNR<10{print} NR>FNR&&FNR==7{for(k=1;k<=NF;k++) {s+=$k;if($k<5) {for(kk=1;kk<=k;kk++) b[k]+=$kk;if($k>1){for(ii=1;ii<$k;ii++)b[k-ii]=b[k]-ii}}}} NR>FNR&&FNR>9&&FNR<=9+s{f=0;for(kk in b){if(b[kk]+9==FNR) {print;f=1}} for(k=1;k<=5;k++){if(f==0){temp=(x[k]-$1)^2+(y[k]-$2)^2+(z[k]-$3)^2; if(temp < 0.01) {print;f=1}}}if(f==0) print $1,$2,$3,"   F   F   F" }END{for(kk in b){ print kk,b[kk]+9}}' /home/users/ntu/dan003/jy/pt/110/2x3/CONTCAR $i/CONTCAR > $i/POSCAR_freq ; cp $i/POSCAR_freq POSCAR_Pt110_${i%%/freq}_freq ; done
+# awk 'BEGIN{j=1;jj=1} NR==1{for(i=1;i<=NF;i++) a[i]=$i} NR==FNR&&NR>1{if(NR==a[j]+10) {x[j]=$1;y[j]=$2;z[j]=$3;j++}} NR>FNR&&FNR<10{print} NR>FNR&&FNR==7{for(k=1;k<=NF;k++) {s+=$k;if($k<5) {for(kk=1;kk<=k;kk++) b[k]+=$kk;if($k>1){for(ii=1;ii<$k;ii++)b[k-ii]=b[k]-ii}}}} NR>FNR&&FNR>9&&FNR<=9+s{f=0;for(kk in b){if(b[kk]+9==FNR) {print;f=1}} for(k=1;k<=5;k++){if(f==0){temp=(x[k]-$1)^2+(y[k]-$2)^2+(z[k]-$3)^2; if(temp < 0.01) {print;f=1}}}if(f==0) print $1,$2,$3,"   F   F   F" }END{for(kk in b){ print kk,b[kk]+9}}' /home/users/ntu/dan003/jy/pt/110/2x3/CONTCAR CONTCAR > POSCAR_freq
+
+
+
+# find -path *[a,b,c,n]/zlauncher -delete
+
+# for i in [0-9]* ; do cd $i ; for j in * ; do cd $j ; pos2xyz.pl CONTCAR ; sed -i "s/Generated/${i}_${j}/" CONTCAR.xyz ; cd .. ; done ; cd .. ; done
+
+# for i in `find -name zlauncher` ; do cd `dirname $i` ; qsub zlauncher ; cd - ; done
+
+# for i in [0-9]* ; do cd $i ; for j in * ; do cd $j ; mkdir 1run ; cp * 1run ; mv POSCAR pos0 ; cp CONTCAR POSCAR ; sed -i 's/out3/out4/' zlauncher ; cd .. ; done ; cd .. ; done
+
+# for i in [0-9]* ; do cd $i ; if [ -d 0 -o -d 1 -o -d 2 ] ; then for j in [0-9] ; do cd $j ; rm -f movie.xyz movie1.xyz movie0.xyz; xdat2xyz.pl ; sed -i "s/FORCE/${i}_${j} FORCE/" movie.xyz ; k=$((`head -1 movie.xyz`+2)) ; tail -$k movie.xyz > movie1.xyz ; head -$k movie.xyz > movie0.xyz; cd ..;done ;fi; cd .. ; done
+
+# for i in `cat list` ; do cd $i ; mkdir 1.2run ; cp * 1.2run ; rm POSCAR; cp CONTCAR POSCAR  ; qsub zlauncher ; cd - ; done
+
+# freq fix ele
+# awk -v ele="V" 'NR<10 {print} NR==6{for(i=1;i<=NF;i++)a[i]=$i} NR==7{n=10;for(i=1;i<=NF;i++) {for(j=1;j<=$i;j++) {b[n]=a[i];n++}}}NR>9&&NR<=n{if(b[NR]==ele) print $1,$2,$3,"   F   F   F"; else print}' CONTCAR 
+# for i in `find */110/*/add/* -name freq[0-9]` ; do echo $i ; mv $i/POSCAR $i/pos_ori; j=`echo ${i:0:1} | tr 'a-z' 'A-Z'`; awk -v ele=$j${i:1:1} 'NR<10 {print} NR==6{for(i=1;i<=NF;i++)a[i]=$i} NR==7{n=10;for(i=1;i<=NF;i++) {for(j=1;j<=$i;j++) {b[n]=a[i];n++}}}NR>9&&NR<=n{if(b[NR]==ele) print $1,$2,$3,"   F   F   F"; else print}' $i/CONTCAR > $i/POSCAR ; done
+
+# grep zpe from vaspkit@freq
+# for  i in  */311/1x2/add/*/freq/ ; do cd $i ;  echo $i | awk -F '/' '{printf "%8s%8s  ",$1,$5}' >> ~/jy/t ; vaspkit -task 501 -T 298.15 | awk '/y E/{print $7}' >> ~/jy/t ; cd - ; done
+
+# batch freq collect
+# for i in */111/*/add/*/freq ; do cd $i ; echo $i >> ~/jy/scratch/list ; vaspkit -task 501 -T 298.15 >>~/jy/scratch/list  ; cd - ; done
+# awk 'NR%29==1||NR%29==15||NR%29==16||NR%29==20{print}' list | sed '1~4s#/# #g'> list1
+# awk '{if(NR%4==1) printf "%3s _%-8s",$1,$5 ; else printf "%10.6f",$7 ; if(NR%4==0) printf "\n"}' list1 > list2
+# for i in _h _nho  _nhoh  _nh2o  _nh2oh  _noh  _o  _oh  _n  _nh  _nh2  _no  ; do grep -w $i list2 >> list3 ; done
+# for i in ni cu pd ag pt au ir rh ; do grep $i list3 >> list4 ; done
+# sed 's/ _/_/' list4 | awk '{print $1,$2,$3,$4}' > list5
+
+# for i in */110/*/add/*/freq[0-9] ; do cd $i ; echo $i >> ~/jy/scratch/list ; vaspkit -task 501 -T 298.15 >>~/jy/scratch/list  ; cd - ; done
+# awk 'NR%29==1||NR%29==15||NR%29==16||NR%29==20{print}' list | sed '1~4s#/# #g'> list1
+# awk '{if(NR%4==1) printf "%3s _%-8s %s",$1,$5,$6 ; else printf "%10.6f",$7 ; if(NR%4==0) printf "\n"}' list1 > list2
+# for i in _h _nho  _nhoh  _nh2o  _nh2oh  _noh  _o  _oh  _n  _nh  _nh2  _no  ; do grep -w $i list2 >> list3 ; done
+# for i in ni cu pd ag pt au ir rh ; do grep $i list3 >> list4 ; done
+# sed 's/ _/_/;s/freq//' list4 | awk '{print $1"_"$2,$3,$4,$5}' > list5
+
+# from POSCAR to MAGMOM
+# awk 'NR==6{for(i=1;i<=NF;i++) {if($i=="C"||$i=="H"||$i=="O") a[i]=0 ; else if($i=="Fe") a[i]=3 ; else if($i=="N") a[i]=1 }} NR==7{for(i=1;i<=NF;i++) b[i]=$i; c=NF} END{printf "MAGMOM =" ; for(i=1;i<=c;i++) printf " %s*%s ",b[i],a[i];printf "\n"}' POSCAR 
+
+# build freq for each 0-9
+# for i in */100/*/add/* ; do cd $i ; for j in [0-9] ; do cp -r $j freq$j ; done ; cd - ; done
+# for i in `find */100/*/add/* -name freq[0-9]` ; do echo $i ; cp $i/POSCAR $i/pos_ori; j=`echo ${i:0:1} | tr 'a-z' 'A-Z'`; awk -v ele=$j${i:1:1} 'NR<10 {print} NR==6{for(i=1;i<=NF;i++)a[i]=$i} NR==7{n=10;for(i=1;i<=NF;i++) {for(j=1;j<=$i;j++) {b[n]=a[i];n++}}}NR>9&&NR<=n{if(b[NR]==ele) print $1,$2,$3,"   F   F   F"; else print}' $i/CONTCAR > $i/POSCAR ; done
+# for i in */100/*/add/*/freq[0-9] ; do cd $i ; ln -sf ../../../INCAR_freq INCAR ;  cd - ; done
+# for i in */100/*/add/{h,n,nh,nh2,nho,nh2o,noh,nhoh,nh2oh,no,o,oh} ; do j=`echo $i|awk -F '/' '{print $1$2"_"$5}'` ; sed "s/XXX/$j/" zlauncher > $i/zlauncher ; cd $i ; qsub zlauncher ; cd - ; done
+#
+
+# find files and operations on the files
+# for i in `find ni/221/ -name CONTCAR` ; do j=`echo $i | awk -F '/' '{printf "%s%s%s%s",$1,$2,$5,$6}'` ; cp `dirname $i`/CONTCAR CONTCAR_${j::5}_${j:5:-1}_${j: -1};     done
+
+
+# convergence check
+# tail */111/*/add/*/*/print-out > out
+# grep -E '==>|reach' out > out0
+# awk '{if($1=="==>"){if(f!=0) {print f; f=$2} else f=$2} else f = 0 }' out0 > out1
+# tail */*/*/add/*/*/print-out | grep -E '==>|reach' | awk '{if($1=="==>"){if(f!=0) {print f; f=$2} else f=$2} else f = 0 }' > out
+
+
+#
+#
+# for i in ??/110/*/add/nh2oh/[0-9] ; do cp $i/CONTCAR CONTCAR_${i::2}${i:3:3}_${i:15:0-2}_${i:0-1} ; done
+
+
+# freq fix for SAC
+# for i in {co,cooh,h}/{52,72,8} ; do if [ -d $i ] ; then cd $i ; mkdir freq ; cp * freq ; awk 'NR==8{print "S"} NR<=8{print} NR>8{if($3>0.29||$3<0.21) print $1,$2,$3,"  T  T T"; else print $1,$2,$3," F F F" ;}' CONTCAR > freq/POSCAR ; cp ../../../INCAR_freq freq/INCAR ; cd - ; fi ; done
+
+
+
+
+

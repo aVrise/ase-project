@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#PBS -N JOBNAME
+#PBS -q normal
+#PBS -P Personal
+#PBS -l select=1:ncpus=24:mpiprocs=6:ompthreads=4
+#PBS -l walltime=24:00:00
+#PBS -j oe
+
+
+idir=${PBS_O_WORKDIR}
+cd $idir
+
+# Set scratch environment
+module load fftw/3.3.4/xe_2017/parallel
+surfix=`awk 'NR==4{a=$1*$2*$3;if(a==1) printf "gam\n" ; else printf "std\n"}' KPOINTS`
+
+time mpirun -genv I_MPI_PIN_DOMAIN=omp -genv I_MPI_PIN=yes -genv OMP_NUM_THREADS=4 -genv OMP_STACKSIZE=4g -genv OMP_PLACES=cores -genv OMP_PROC_BIND=close /home/users/ntu/jiyuanli/bin/vasp6_$surfix >  print-out 2>&1
+
+echo $(date) $PBS_JOBNAME ${PBS_O_WORKDIR} >> ~/LOG
+
+
+
